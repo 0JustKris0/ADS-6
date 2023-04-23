@@ -2,7 +2,6 @@
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
 #include<string>
-using namespace std;
 template<typename T, int size>
 class TPQueue {
  private:
@@ -13,19 +12,18 @@ class TPQueue {
             arr = new T[size];
         }
         ~TPQueue() {
-          delete[]arr;
+            delete[]arr;
         }
         bool isEmpty()const {
-          return 0 == count;
+            return 0 == count;
         }
         bool isFull()const {
-          return 0 == size;
+            return 0 == size;
         }
         void push(const T& value) {
-          if (isFull()) {
-            throw string("Full!");
-            } 
-          else {
+        if (isFull()) {
+            throw std::string("Full!");
+            } else {
             int n = last;
             arr[last++ % size] = value;
             arr[last % size] = value;
@@ -40,16 +38,15 @@ class TPQueue {
             ++count;
             ++last;
             }
-          }
-          const T& pop() {
+       }
+        const T& pop() {
             if (isEmpty()) {
-              throw string("Empty!");
-            } 
-            else {
-              --count;
-              return arr[first++ % size];
+                throw std::string("Empty!");
+            } else {
+                --count;
+            return arr[first++ % size];
             }
-          }
+        }
 };
 struct SYM {
   char ch;
