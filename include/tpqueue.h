@@ -23,7 +23,7 @@ class TPQueue {
         }
         void push(const T& value) {
           if (isFull()) {
-            throw std::string("Full!");
+            throw string("Full!");
             } 
           else {
             int n = last;
@@ -43,7 +43,7 @@ class TPQueue {
           }
           const T& pop() {
             if (isEmpty()) {
-              throw std::string("Empty!");
+              throw string("Empty!");
             } 
             else {
               --count;
