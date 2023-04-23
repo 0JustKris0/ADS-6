@@ -1,51 +1,78 @@
 // Copyright 2022 NNTU-CS
 #ifndef INCLUDE_TPQUEUE_H_
 #define INCLUDE_TPQUEUE_H_
-#include <string>
+#include <cassert>
+
 template<typename T, int size>
 class TPQueue {
  private:
     T* arr;
-    int first, last, count;
+    int sizeTPQ;
+    int first, last;
+    int cur;
+
  public:
-    TPQueue() : first(0), last(0), count(0), arr(new T[size]) {}
+    TPQueue():sizeTPQ(size), first(0), last(0), cur(0) {
+        arr = new T[sizeTPQ + 1];
+    }
+
     ~TPQueue() {
-      delete[] arr;
+        delete[] arr;
     }
-    bool isEmpty() const {
-      return 0 == count;
-    }
-    bool isFull() const {
-      return size == count;
-    }
+
     void push(const T& value) {
-      if (isFull()) {
-        throw std::string("Full");
-      } else {
-        int i = last;
-          for ( ; i != first; --i) {
-            if (arr[(i - 1) % size].prior < value.prior) {
-            arr[i % size] = arr[(i - 1) % size];
-          } else {
-            break;
-          }
+        assert(cur < sizeTPQ);
+        if (cur == 0) {
+            arr[last++] = value;
+            cur++;
+        } else {
+            int i = last - 1;
+            bool op = 0;
+            ////////////
+            if (i >= first && value.prior > arr[i].prior) {
+                while (i >= first && value.prior > arr[i].prior) {
+                op = 1;
+                arr[i + 1] = arr[i];
+                arr[i] = value;
+                i--;
+                }
+            } else {
+                arr[last] = value;
+            }
+            last++;
+            cur++;
         }
-        arr[i % size] = value;
-        count++;
-        last++;
-      }
+        if (last > sizeTPQ) {
+            last -= sizeTPQ + 1;
+        }
     }
+
     const T& pop() {
-      if (isEmpty()) {
-        throw std::string("Empty");
-      } else {
-        count--;
-        return arr[first++ % size];
-      }
+        assert(cur > 0);
+        cur--;
+        if (first > sizeTPQ) {
+            first -= sizeTPQ + 1;
+        }
+        return arr[first++];
+    }
+
+    const T& get() {
+        assert(cur > 0);
+        return arr[first];
+    }
+
+    bool isFull() const {
+        return cur == sizeTPQ;
+    }
+
+    bool isEmpty() const {
+        return cur == 0;
     }
 };
+
 struct SYM {
-  char ch;
-  int prior;
+    char ch;
+    int prior;
 };
-#endif  // INCLUDE_TPQUEUE_H_
+
+#endif    // INCLUDE_TPQUEUE_H_
